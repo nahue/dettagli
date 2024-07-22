@@ -1,5 +1,7 @@
-import Link from "next/link";
+import { headers } from "next/headers";
 import { db } from "~/server/db";
+
+export const dynamic = "force-dynamic";
 
 const mockUrls = [
   "https://uploadthing-prod-sea1.s3.us-west-2.amazonaws.com/7f2aaba6-cb86-4b27-9983-38bda24a38c8-tvktp9.jpg",
