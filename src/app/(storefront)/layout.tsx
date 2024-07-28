@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
-import TopNav from "../_components/top-nav";
+import TopNav from "./_components/top-nav";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "../api/uploadthing/core";
@@ -18,10 +18,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable} dark`}>
-        <body className="flex flex-col gap-4">{children}</body>
-      </html>
-    </ClerkProvider>
+    <>
+      <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+
+      <TopNav />
+      {children}
+    </>
   );
 }
