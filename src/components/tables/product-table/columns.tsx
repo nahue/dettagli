@@ -1,10 +1,11 @@
 "use client";
-import { ColumnDef } from "@tanstack/react-table";
+import { type ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { User } from "~/constants/data";
+import { type Product } from "~/constants/data";
 import { Checkbox } from "~/components/ui/checkbox";
+import Image from "next/image";
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Product>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -31,6 +32,16 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "featuredImage",
     header: "FEATURED IMAGE",
+    cell: ({ row }) => {
+      return (
+        <Image
+          src={row.getValue("featuredImage")}
+          width={80}
+          height={80}
+          alt={row.getValue("name")}
+        />
+      );
+    },
   },
   {
     id: "actions",

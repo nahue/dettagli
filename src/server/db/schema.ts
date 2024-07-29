@@ -1,12 +1,14 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
-import { sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
-  index,
   pgTableCreator,
+  primaryKey,
+  real,
   serial,
   timestamp,
+  uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -18,23 +20,71 @@ import {
  */
 export const createTable = pgTableCreator((name) => `dettagli_${name}`);
 
-export const images = createTable(
-  "image",
+export const Variants = createTable("variant", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }).notNull().unique(),
+});
+
+export const variantProducts = relations(Variants, ({ many }) => ({
+  products: many(Products),
+}));
+
+export const Products = createTable(
+  "products",
   {
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
-    url: varchar("url", { length: 1024 }).notNull(),
-
-    userId: varchar("userId", { length: 256 }).notNull(),
-
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
+    slug: varchar("slug", { length: 256 }).notNull(),
+    featuredImage: varchar("featuredImage", { length: 1024 }).notNull(),
+    value: real("value").notNull().default(0),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+      .notNull()
+      .$onUpdate(() => new Date()),
   },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
+  (table) => {
+    return {
+      slugIndex: uniqueIndex("slugIndex").on(table.slug),
+    };
+  },
 );
+
+export const productVariants = relations(Products, ({ many }) => ({
+  variants: many(Variants),
+}));
+
+export const ProductVariantTable = createTable(
+  "product_variant",
+  {
+    productId: serial("product_id")
+      .references(() => Products.id)
+      .notNull(),
+    variantId: serial("variant_id")
+      .references(() => Variants.id)
+      .notNull(),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.productId, table.variantId] }),
+    };
+  },
+);
+
+export const productToVariantsRelations = relations(
+  ProductVariantTable,
+  ({ one }) => ({
+    product: one(Products, {
+      fields: [ProductVariantTable.productId],
+      references: [Products.id],
+    }),
+    variant: one(Variants, {
+      fields: [ProductVariantTable.variantId],
+      references: [Variants.id],
+    }),
+  }),
+);
+
+export type InsertVariant = typeof Variants.$inferInsert;
+export type InsertProduct = typeof Products.$inferInsert;
+
+export type SelectProduct = typeof Products.$inferSelect;
