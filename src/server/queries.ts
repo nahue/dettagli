@@ -26,9 +26,9 @@ export async function getProducts() {
   });
 }
 
-export async function getProduct(slug: string) {
+export async function getProduct(id: number) {
   return await db.query.Products.findFirst({
-    where: (model, { eq }) => eq(model.slug, slug),
+    where: (model, { eq }) => eq(model.id, id),
   });
 }
 

@@ -7,5 +7,5 @@ import { revalidatePath } from "next/cache";
 
 export async function updateProduct(data: InsertProduct, productId: number) {
   await db.update(Products).set(data).where(eq(Products.id, productId));
-  revalidatePath(`/admin/products/${data.slug}`);
+  revalidatePath(`/admin/products/${data.id}`);
 }

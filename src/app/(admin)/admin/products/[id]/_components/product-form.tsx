@@ -20,7 +20,6 @@ import { Button } from "~/components/ui/button";
 import { type SelectProduct } from "~/server/db/schema";
 import { updateProduct } from "~/server/actions";
 import Image from "next/image";
-import { UploadButton } from "~/utils/uploadthing";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({

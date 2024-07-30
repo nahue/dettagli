@@ -9,8 +9,8 @@ import {
 import { getProduct } from "~/server/queries";
 import ProductForm from "./_components/product-form";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const product = await getProduct(params.slug);
+export default async function Page({ params }: { params: { id: number } }) {
+  const product = await getProduct(params.id);
   console.log({ product });
 
   return (
