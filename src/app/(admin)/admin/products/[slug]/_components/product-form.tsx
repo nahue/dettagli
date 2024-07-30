@@ -15,14 +15,23 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Textarea } from "~/components/ui/textarea";
+// import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
 import { type SelectProduct } from "~/server/db/schema";
+import { updateProduct } from "~/server/actions";
+import Image from "next/image";
+import { UploadButton } from "~/utils/uploadthing";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
+  slug: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  featuredImage: z.string(),
+  value: z.coerce.number().int().gt(0),
 });
 
 type Props = {
@@ -30,20 +39,25 @@ type Props = {
 };
 
 const ProductForm = ({ product }: Props) => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: product,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log(values, product.id);
+    await updateProduct(values, product.id);
   }
 
   return (
     <Form {...form}>
-      <form className="grid gap-6">
+      <form
+        onSubmit={form.handleSubmit((data) => onSubmit(data))}
+        className="space-y-8"
+      >
         <div className="grid gap-3">
           <FormField
             control={form.control}
@@ -64,50 +78,53 @@ const ProductForm = ({ product }: Props) => {
             )}
           />
         </div>
-        <div className="grid gap-3">
+        {/* <div className="grid gap-3">
           <Label htmlFor="description">Description</Label>
           <Textarea
             id="description"
             defaultValue="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec ultricies ultricies, nunc nisl ultricies nunc, nec ultricies nunc nisl nec nunc."
             className="min-h-32"
           />
-        </div>
+        </div> */}
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="grid gap-3">
-            <Label htmlFor="price">Price</Label>
-            <Input id="price" type="number" defaultValue="99.99" />
+            <FormField
+              control={form.control}
+              name="value"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    <Label>Price</Label>
+                  </FormLabel>
+                  <FormControl>
+                    <Input type="number" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-          <div className="grid gap-3">
+          {/* <div className="grid gap-3">
             <Label htmlFor="inventory">Inventory Quantity</Label>
             <Input id="inventory" type="number" defaultValue="100" />
-          </div>
+          </div> */}
         </div>
         <div className="grid gap-3">
           <Label htmlFor="image">Product Image</Label>
           <div className="grid gap-2">
-            <img
-              src="/placeholder.svg"
+            <Image
+              src={product.featuredImage}
               alt="Product image"
-              width={300}
-              height={300}
-              className="aspect-square w-full rounded-md object-cover"
+              width={100}
+              height={100}
+              className="aspect-square w-72 rounded-md object-cover"
             />
-            <div className="grid grid-cols-3 gap-2">
-              <Button variant="outline" size="sm">
-                <div className="h-4 w-4" />
-                <span>Upload</span>
-              </Button>
-              <Button variant="outline" size="sm">
-                <div className="h-4 w-4" />
-                <span>Delete</span>
-              </Button>
-              <Button variant="outline" size="sm">
-                <div className="h-4 w-4" />
-                <span>Zoom</span>
-              </Button>
-            </div>
           </div>
         </div>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   );
