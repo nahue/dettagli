@@ -35,7 +35,3 @@ export async function getProduct(id: number) {
 export async function createVariant(data: InsertVariant | InsertVariant[]) {
   return await db.insert(Variants).values(data).returning();
 }
-
-export async function createProduct(data: InsertProduct) {
-  return (await db.insert(Products).values(data).returning())[0];
-}

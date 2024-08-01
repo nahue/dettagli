@@ -1,6 +1,13 @@
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import PageContainer from "~/components/layout/page-container";
 import { ProductClient } from "~/components/tables/product-table/client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { getProducts } from "~/server/queries";
 
 const breadcrumbItems = [
@@ -10,13 +17,19 @@ const breadcrumbItems = [
 
 export default async function page() {
   const dbProducts = await getProducts();
-  console.log(dbProducts);
+  console.log({ dbProducts });
   return (
     <PageContainer>
-      <div className="space-y-2">
-        <Breadcrumbs items={breadcrumbItems} />
-        <ProductClient data={dbProducts} />
-      </div>
+      <Breadcrumbs items={breadcrumbItems} />
+      <Card>
+        <CardHeader>
+          <CardTitle>Productos ({dbProducts.length})</CardTitle>
+          <CardDescription>Lista de productos</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ProductClient data={dbProducts} />
+        </CardContent>
+      </Card>
     </PageContainer>
   );
 }

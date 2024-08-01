@@ -6,22 +6,18 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
-import { getProduct } from "~/server/queries";
 import ProductForm from "../../../../../components/forms/product-form";
 
-export default async function Page({ params }: { params: { id: number } }) {
-  const product = await getProduct(params.id);
-  console.log({ product });
-
+export default async function Page() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Editar Producto</CardTitle>
+        <CardTitle>Nuevo Producto</CardTitle>
         <CardDescription>Actualizar detalles</CardDescription>
       </CardHeader>
 
       <CardContent>
-        <ProductForm product={product!} />
+        <ProductForm />
       </CardContent>
     </Card>
   );

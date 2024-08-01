@@ -19,8 +19,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable} dark`}>
-        <body className="flex flex-col gap-4">{children}</body>
+      <html lang="en" className={`${GeistSans.variable} dark h-screen`}>
+        <body className="flex h-screen flex-col">{children}</body>
       </html>
     </ClerkProvider>
   );
