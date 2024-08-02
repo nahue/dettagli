@@ -35,7 +35,6 @@ export const Products = createTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
     slug: varchar("slug", { length: 256 }).notNull(),
-    featuredImage: varchar("featuredImage", { length: 1024 }).notNull(),
     value: real("value").notNull().default(0),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at")
@@ -83,6 +82,12 @@ export const productToVariantsRelations = relations(
     }),
   }),
 );
+
+export const Images = createTable("images", {
+  name: varchar("name", { length: 256 }).notNull(),
+  url: varchar("url", { length: 1024 }).notNull(),
+  productId: serial("product_id").references(() => Products.id).notNull(),
+})
 
 export type InsertVariant = typeof Variants.$inferInsert;
 export type InsertProduct = typeof Products.$inferInsert;

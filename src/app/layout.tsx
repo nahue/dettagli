@@ -7,6 +7,8 @@ import TopNav from "../_components/top-nav";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "../api/uploadthing/core";
+import { Toaster } from "~/components/ui/sonner";
+
 
 export const metadata: Metadata = {
   title: "Dettagli",
@@ -20,7 +22,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable} dark h-screen`}>
-        <body className="flex h-screen flex-col">{children}</body>
+        <body className="flex h-screen flex-col">{children}
+
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );

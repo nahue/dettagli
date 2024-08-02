@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import "dotenv/config";
-import { createProduct, createVariant } from "../src/server/queries";
-import { ProductVariantTable } from "../src/server/db/schema";
+import { createVariant } from "../src/server/queries";
+import { Images, Products, ProductVariantTable } from "../src/server/db/schema";
 import { db } from "../src/server/db";
 import { sampleSize } from "lodash-es";
 async function main() {
@@ -30,20 +30,31 @@ async function main() {
   ];
 
   for (const index in images) {
-    const product = await createProduct({
-      name: `Product ${index}`,
-      slug: `product-${index}`,
-      featuredImage: images[index]!,
-    });
+    await db.transaction(async (tx) => {
+      const product = await tx
+        .insert(Products)
+        .values({
+          name: `Product ${index}`,
+          slug: `product-${index}`
+        })
+        .returning();
 
-    // Insert product variants
-    const variantsSample = sampleSize(variants, 2);
-    await db.insert(ProductVariantTable).values(
-      variantsSample.map((variant) => ({
-        productId: product?.id,
-        variantId: variant.id,
-      })),
-    );
+      await tx.insert(Images).values({
+        productId: product[0]!.id,
+        name: images[index]!,
+        url: images[index]!,
+      })
+
+      // Insert product variants
+      const variantsSample = sampleSize(variants, 2);
+      await tx.insert(ProductVariantTable).values(
+        variantsSample.map((variant) => ({
+          productId: product[0]!.id,
+          variantId: variant.id,
+        })),
+      );
+    })
+
   }
 }
 

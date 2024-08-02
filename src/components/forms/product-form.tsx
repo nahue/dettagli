@@ -22,18 +22,22 @@ import { updateProduct } from "~/server/actions";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createProduct } from "~/server/actions";
+import { FileUploader } from "../file-uploader";
+import { useUploadFile } from "~/hooks/use-upload-file";
+import { UploadedFilesCard } from "../uploaded-files-card";
+import slugify from "slugify";
+import { toast } from "sonner";
+import { getErrorMessage } from "~/lib/handle-error";
+import { omit } from "lodash-es";
+
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  //   slug: z
-  //     .string()
-  //     .min(2, {
-  //       message: "Name must be at least 2 characters.",
-  //     })
-  //     .nullable(),
-  featuredImage: z.string().nullable(),
+  slug: z
+    .string(),
+  images: z.array(z.instanceof(File)),
   value: z.coerce.number().int().gt(0),
 });
 
@@ -43,25 +47,62 @@ type Props = {
 
 const ProductForm = ({ product }: Props) => {
   const router = useRouter();
+  const [loading, setLoading] = React.useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: product ?? {
       name: "",
-      featuredImage:
-        "https://utfs.io/f/bcc7d907-98fa-42d7-af88-97a8faa1535e-gt99c8.jpeg",
+      images: [],
       value: 0,
+      slug: ""
     },
   });
+  const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
+    "imageUploader",
+    { defaultUploadedFiles: [] }
+  )
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(input: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    const dbData = omit(input, ["images"])
+
     if (product?.id) {
-      console.log(values, product.id);
-      await updateProduct(values as InsertProduct, product.id);
-    } else {
-      await createProduct(values as InsertProduct);
+      console.log(input, product.id);
+      return await updateProduct(dbData, product.id);
     }
+
+    const productId = await createProduct({
+      ...dbData,
+      slug: slugify(input.name)
+    });
+
+    if (input.images.length > 0) {
+      await onUpload(input.images, { productId })
+    }
+
+    setLoading(false)
+    toast.success("Product created")
+
+    router.push(`/admin/products/${productId}`);
+
+    // if (input.images.length > 0) {
+
+    //   toast.promise(onUpload(input.images), {
+    //     loading: "Uploading images...",
+    //     success: () => {
+    //       form.reset()
+    //       setLoading(false)
+    //       return "Images uploaded"
+    //     },
+    //     error: (err) => {
+    //       setLoading(false)
+    //       return getErrorMessage(err)
+    //     },
+    //   })
+    // }
+
+
   }
 
   return (
@@ -127,18 +168,45 @@ const ProductForm = ({ product }: Props) => {
         <div className="grid gap-3">
           <Label htmlFor="image">Product Image</Label>
           <div className="grid gap-2">
-            {product?.featuredImage && (
-              <Image
-                src={product.featuredImage}
-                alt="Product image"
-                width={100}
-                height={100}
-                className="aspect-square w-72 rounded-md object-cover"
-              />
-            )}
+
+            {/* <UploadButton
+              endpoint={"imageUploader"}
+              onClientUploadComplete={(url: any) => {
+                console.log("files", url);
+                // setPdfData(url);
+                window.alert("Upload completed");
+              }}
+            /> */}
+            <FormField
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <div className="space-y-6">
+                  <FormItem className="w-full">
+                    <FormLabel>Images</FormLabel>
+                    <FormControl>
+                      <FileUploader
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        maxFileCount={1}
+                        maxSize={4 * 1024 * 1024}
+                        progresses={progresses}
+                        // pass the onUpload function here for direct upload
+                        // onUpload={uploadFiles}
+                        disabled={isUploading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                  {uploadedFiles.length > 0 ? (
+                    <UploadedFilesCard uploadedFiles={uploadedFiles} />
+                  ) : null}
+                </div>
+              )}
+            />
           </div>
         </div>
-        <Button type="submit">Submit</Button>
+        <Button type="submit" disabled={loading}>Submit</Button>
       </form>
     </Form>
   );

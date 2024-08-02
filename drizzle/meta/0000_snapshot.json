@@ -1,9 +1,45 @@
 {
-  "id": "13ea9cb5-64af-4ad7-95d2-8e961eae2064",
+  "id": "5d667edc-b183-46d8-a666-916dbfa0973b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.dettagli_images": {
+      "name": "dettagli_images",
+      "schema": "",
+      "columns": {
+        "url": {
+          "name": "url",
+          "type": "varchar(1024)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "product_id": {
+          "name": "product_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "dettagli_images_product_id_dettagli_products_id_fk": {
+          "name": "dettagli_images_product_id_dettagli_products_id_fk",
+          "tableFrom": "dettagli_images",
+          "tableTo": "dettagli_products",
+          "columnsFrom": [
+            "product_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.dettagli_product_variant": {
       "name": "dettagli_product_variant",
       "schema": "",
@@ -80,12 +116,6 @@
         "slug": {
           "name": "slug",
           "type": "varchar(256)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "featuredImage": {
-          "name": "featuredImage",
-          "type": "varchar(1024)",
           "primaryKey": false,
           "notNull": true
         },

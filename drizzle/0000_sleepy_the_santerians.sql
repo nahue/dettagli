@@ -1,3 +1,8 @@
+CREATE TABLE IF NOT EXISTS "dettagli_images" (
+	"url" varchar(1024) NOT NULL,
+	"product_id" serial NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "dettagli_product_variant" (
 	"product_id" serial NOT NULL,
 	"variant_id" serial NOT NULL,
@@ -8,7 +13,6 @@ CREATE TABLE IF NOT EXISTS "dettagli_products" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(256) NOT NULL,
 	"slug" varchar(256) NOT NULL,
-	"featuredImage" varchar(1024) NOT NULL,
 	"value" real DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp NOT NULL
@@ -19,6 +23,12 @@ CREATE TABLE IF NOT EXISTS "dettagli_variant" (
 	"name" varchar(256) NOT NULL,
 	CONSTRAINT "dettagli_variant_name_unique" UNIQUE("name")
 );
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "dettagli_images" ADD CONSTRAINT "dettagli_images_product_id_dettagli_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."dettagli_products"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "dettagli_product_variant" ADD CONSTRAINT "dettagli_product_variant_product_id_dettagli_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."dettagli_products"("id") ON DELETE no action ON UPDATE no action;
