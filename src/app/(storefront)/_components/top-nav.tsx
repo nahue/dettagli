@@ -14,15 +14,15 @@ const TopNav = () => {
           <ul className="ml-8 hidden gap-6 text-sm md:flex md:items-center">
             <li>
               <Link
-                href="/"
+                href="/productos"
                 className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
               >
-                Todo
+                Productos
               </Link>
             </li>
             <li>
               <Link
-                href="/"
+                href="/guia-de-talles"
                 className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
               >
                 Guia de Talles
@@ -30,7 +30,7 @@ const TopNav = () => {
             </li>
             <li>
               <Link
-                href="/"
+                href="/contacto"
                 className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
               >
                 Contacto
