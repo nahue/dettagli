@@ -17,7 +17,7 @@ const breadcrumbItems = [
 
 export default async function page() {
   const dbProducts = await getProducts();
-  console.log({ dbProducts });
+
   return (
     <PageContainer>
       <Breadcrumbs items={breadcrumbItems} />

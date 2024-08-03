@@ -23,12 +23,18 @@ export async function getMyImages() {
 export async function getProducts() {
   return await db.query.Products.findMany({
     orderBy: (model, { desc }) => desc(model.id),
+    with: {
+      images: true
+    }
   });
 }
 
 export async function getProduct(id: number) {
   return await db.query.Products.findFirst({
     where: (model, { eq }) => eq(model.id, id),
+    with: {
+      images: true
+    }
   });
 }
 

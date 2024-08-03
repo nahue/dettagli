@@ -12,6 +12,7 @@ import { type Product } from "~/constants/data";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { deleteProduct } from "~/server/actions";
 
 interface CellActionProps {
   data: Product;
@@ -22,7 +23,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {};
+  const onConfirm = async () => {
+    deleteProduct(data.id)
+  };
 
   return (
     <>

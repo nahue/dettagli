@@ -1,11 +1,10 @@
 "use client";
 import { type ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
-import { type Product } from "~/constants/data";
-import { Checkbox } from "~/components/ui/checkbox";
 import Image from "next/image";
+import { SelectProduct } from "~/server/db/schema";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<SelectProduct>[] = [
   //   {
   //     id: "select",
   //     header: ({ table }) => (
@@ -28,17 +27,21 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
     header: "Nombre",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-4">
-        <Image
-          src={row.original.featuredImage}
-          width={80}
-          height={80}
-          alt={row.getValue("name")}
-        />
-        {row.getValue("name")}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const featuredImage = row.original.images[0]?.url
+      return (
+        <div className="flex items-center gap-4">
+          {featuredImage ? <Image
+            src={featuredImage}
+            width={80}
+            height={80}
+            alt={row.getValue("name")}
+          /> : <div className="w-[80px] h-[80px]">
+          </div>}
+          {row.getValue("name")}
+        </div>
+      )
+    },
   },
   {
     accessorKey: "value",

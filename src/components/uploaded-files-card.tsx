@@ -27,7 +27,7 @@ export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
                     <ScrollArea className="pb-4">
                         <div className="flex w-max space-x-2.5">
                             {uploadedFiles.map((file) => (
-                                <div key={file.key} className="relative aspect-video w-64">
+                                <div key={file.url} className="relative aspect-video w-64">
                                     <Image
                                         src={file.url}
                                         alt={file.name}

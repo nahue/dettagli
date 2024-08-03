@@ -17,7 +17,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 // import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
-import { InsertProduct, type SelectProduct } from "~/server/db/schema";
+import { Images, InsertProduct, type SelectProduct, type SelectImage } from "~/server/db/schema";
 import { updateProduct } from "~/server/actions";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -29,15 +29,16 @@ import slugify from "slugify";
 import { toast } from "sonner";
 import { getErrorMessage } from "~/lib/handle-error";
 import { omit } from "lodash-es";
+import { DevTool } from "@hookform/devtools";
+import { UploadedFile } from "~/types";
 
 
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  slug: z
-    .string(),
-  images: z.array(z.instanceof(File)),
+  slug: z.string(),
+  imagesToUpload: z.array(z.instanceof(File)).default([]),
   value: z.coerce.number().int().gt(0),
 });
 
@@ -49,59 +50,69 @@ const ProductForm = ({ product }: Props) => {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
+    // @ts-ignore
     defaultValues: product ?? {
       name: "",
-      images: [],
+      imagesToUpload: [],
       value: 0,
       slug: ""
     },
   });
+
   const { onUpload, progresses, uploadedFiles, isUploading } = useUploadFile(
     "imageUploader",
-    { defaultUploadedFiles: [] }
+    // @ts-ignore
+    { defaultUploadedFiles: product?.images || [] }
   )
+
+  function persistProduct(data: z.infer<typeof formSchema>, productId: number | undefined) {
+    const dbData = omit(data, ["imagesToUpload"])
+
+    if (productId) {
+      return updateProduct(dbData, productId)
+    }
+
+    return createProduct({
+      ...dbData,
+      slug: slugify(data.name)
+    })
+  }
 
   async function onSubmit(input: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const dbData = omit(input, ["images"])
 
-    if (product?.id) {
-      console.log(input, product.id);
-      return await updateProduct(dbData, product.id);
-    }
+    toast.promise(persistProduct(input, product?.id), {
+      loading: "Creating product...",
+      success: async (productId: number) => {
+        if (input.imagesToUpload.length == 0) {
+          return "Product saved..."
+        }
 
-    const productId = await createProduct({
-      ...dbData,
-      slug: slugify(input.name)
-    });
 
-    if (input.images.length > 0) {
-      await onUpload(input.images, { productId })
-    }
+        toast.promise(onUpload(input.imagesToUpload, { productId }), {
+          loading: "Uploading images...",
+          success: () => {
+            form.reset()
+            setLoading(false)
+            router.push(`/admin/products/${productId}`);
+            return "Images uploaded"
+          },
+          error: (err) => {
+            setLoading(false)
+            return getErrorMessage(err)
+          },
+        })
 
-    setLoading(false)
-    toast.success("Product created")
-
-    router.push(`/admin/products/${productId}`);
-
-    // if (input.images.length > 0) {
-
-    //   toast.promise(onUpload(input.images), {
-    //     loading: "Uploading images...",
-    //     success: () => {
-    //       form.reset()
-    //       setLoading(false)
-    //       return "Images uploaded"
-    //     },
-    //     error: (err) => {
-    //       setLoading(false)
-    //       return getErrorMessage(err)
-    //     },
-    //   })
-    // }
-
+        return "Product saved..."
+      },
+      error: (err) => {
+        setLoading(false)
+        return getErrorMessage(err)
+      },
+    })
 
   }
 
@@ -119,6 +130,27 @@ const ProductForm = ({ product }: Props) => {
               <FormItem>
                 <FormLabel>
                   <Label htmlFor="name">Product Name</Label>
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="grid gap-3">
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  <Label htmlFor="name">Slug</Label>
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
@@ -168,18 +200,21 @@ const ProductForm = ({ product }: Props) => {
         <div className="grid gap-3">
           <Label htmlFor="image">Product Image</Label>
           <div className="grid gap-2">
-
-            {/* <UploadButton
-              endpoint={"imageUploader"}
-              onClientUploadComplete={(url: any) => {
-                console.log("files", url);
-                // setPdfData(url);
-                window.alert("Upload completed");
-              }}
-            /> */}
+            {/* <div>
+              {product?.images?.map((file) => (
+                <Image
+                  key={file.url}
+                  src={file.url}
+                  alt={file.name}
+                  width={100}
+                  height={100}
+                  className="rounded-md object-cover"
+                />
+              ))}
+            </div> */}
             <FormField
               control={form.control}
-              name="images"
+              name="imagesToUpload"
               render={({ field }) => (
                 <div className="space-y-6">
                   <FormItem className="w-full">
@@ -208,6 +243,8 @@ const ProductForm = ({ product }: Props) => {
         </div>
         <Button type="submit" disabled={loading}>Submit</Button>
       </form>
+
+      {/* <DevTool control={form.control} /> */}
     </Form>
   );
 };

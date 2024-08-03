@@ -43,6 +43,7 @@ async function main() {
         productId: product[0]!.id,
         name: images[index]!,
         url: images[index]!,
+        isFeatured: true
       })
 
       // Insert product variants
