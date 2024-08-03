@@ -40,6 +40,15 @@ export async function getProduct(id: number) {
   });
 }
 
+export async function getProductBySlug(slug: string) {
+  return await db.query.Products.findFirst({
+    where: (model, { eq }) => eq(model.slug, slug),
+    with: {
+      images: true
+    }
+  });
+}
+
 export async function createVariant(data: InsertVariant | InsertVariant[]) {
   return await db.insert(Variants).values(data).returning();
 }
