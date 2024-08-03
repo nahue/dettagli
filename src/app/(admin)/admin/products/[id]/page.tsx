@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: { id: number } }) {
   const breadcrumbItems = [
     { title: "Dashboard", link: "/admin" },
     { title: "Productos", link: "/admin/products" },
-    { title: product?.name, link: `/admin/products/${product?.id}` },
+    { title: product?.name!, link: `/admin/products/${product?.id}` },
   ];
 
   return (

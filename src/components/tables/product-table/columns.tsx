@@ -31,12 +31,13 @@ export const columns: ColumnDef<SelectProduct>[] = [
       const featuredImage = row.original.images[0]?.url
       return (
         <div className="flex items-center gap-4">
-          {featuredImage ? <Image
+          {featuredImage ? <div className="relative w-48 aspect-[4/3]"><Image
             src={featuredImage}
-            width={80}
-            height={80}
+            fill
+            loading="lazy"
             alt={row.getValue("name")}
-          /> : <div className="w-[80px] h-[80px]">
+            className="rounded-md object-cover"
+          /> </div> : <div className="w-[80px] h-[80px]">
           </div>}
           {row.getValue("name")}
         </div>

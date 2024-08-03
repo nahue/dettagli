@@ -3,7 +3,7 @@ import "dotenv/config";
 import { createVariant } from "../src/server/queries";
 import { Images, Products, ProductVariantTable } from "../src/server/db/schema";
 import { db } from "../src/server/db";
-import { sampleSize } from "lodash-es";
+import { random, sampleSize } from "lodash-es";
 async function main() {
   const variants = await createVariant([
     {
@@ -23,40 +23,58 @@ async function main() {
     },
   ]);
 
-  const images = [
-    "https://utfs.io/f/bcc7d907-98fa-42d7-af88-97a8faa1535e-gt99c8.jpeg",
-    "https://utfs.io/f/a87214c7-d1ab-4a0d-b3c9-f679d95119d6-m36kwb.jpeg",
-    "https://utfs.io/f/2a47910b-fa47-4117-b64b-58a8b82b8e3b-svukre.jpeg",
-  ];
+  const products = [{
+    name: "Remera WAFFLE",
+    slug: "remera-waffle",
+    value: 16_000,
+    images: [{
+      name: "Remera WAFFLE",
+      url: "https://utfs.io/f/245d1b34-f716-4e24-a4fd-7cd954e9ed0b-e3yshj.png",
+      isFeatured: true
+    },
+    {
+      name: "Remera WAFFLE",
+      url: "https://utfs.io/f/a14376f4-be36-4d27-80ee-4b6e2498f03e-j8mk1u.png",
+      isFeatured: false
+    }]
+  }
+  ]
 
-  for (const index in images) {
-    await db.transaction(async (tx) => {
-      const product = await tx
-        .insert(Products)
-        .values({
-          name: `Product ${index}`,
-          slug: `product-${index}`
-        })
-        .returning();
 
-      await tx.insert(Images).values({
-        productId: product[0]!.id,
-        name: images[index]!,
-        url: images[index]!,
-        isFeatured: true
+  await products.forEach(async (product) => {
+    const p = await db
+      .insert(Products)
+      .values({
+        name: product.name,
+        slug: product.slug,
+        value: product.value ?? random(5000, 10_000)
       })
+      .returning();
 
-      // Insert product variants
-      const variantsSample = sampleSize(variants, 2);
-      await tx.insert(ProductVariantTable).values(
-        variantsSample.map((variant) => ({
-          productId: product[0]!.id,
-          variantId: variant.id,
-        })),
-      );
+    console.log(p[0]!.id)
+
+    product.images.forEach(async (image) => {
+      await db.insert(Images).values({
+        productId: p[0]!.id,
+        name: image.name,
+        url: image.url,
+        isFeatured: image.isFeatured
+      })
     })
 
+
+    // Insert product variants
+    // const variantsSample = sampleSize(variants, 2);
+    // console.log({ variantsSample })
+    // await tx.insert(ProductVariantTable).values(
+    //   variantsSample.map((variant) => ({
+    //     productId: p[0]!.id,
+    //     variantId: variant.id,
+    //   })),
+    // );
+
   }
+  )
 }
 
 await main();

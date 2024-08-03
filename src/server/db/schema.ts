@@ -79,6 +79,7 @@ export const productToVariantsRelations = relations(
 );
 
 export const Images = createTable("images", {
+  id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }).notNull(),
   url: varchar("url", { length: 1024 }).notNull(),
   productId: serial("product_id").references(() => Products.id, { onDelete: "cascade" }).notNull(),

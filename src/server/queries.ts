@@ -20,11 +20,13 @@ export async function getMyImages() {
   //   });
 }
 
-export async function getProducts() {
+export async function getProductsWithFeaturedImage() {
   return await db.query.Products.findMany({
     orderBy: (model, { desc }) => desc(model.id),
     with: {
-      images: true
+      images: {
+        where: (model, { eq }) => eq(model.isFeatured, true),
+      }
     }
   });
 }

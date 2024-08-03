@@ -1,28 +1,43 @@
-"use client";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import React from "react";
-import { UploadButton } from "~/utils/uploadthing";
 
 const TopNav = () => {
-  const router = useRouter();
   return (
-    <nav className="flex w-full items-center justify-between border-b p-4 text-xl font-semibold">
-      <div>Dettagli</div>
-      <div className="flex flex-row">
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
+    <nav className="relative flex items-center justify-between p-4 lg:px-6">
+      <div className="flex w-full items-center">
+        {/* Left side */}
+        <div className="flex w-full md:w-1/3">
+          <span className="ml-2 flex-none select-none text-sm font-medium uppercase md:hidden lg:block">
+            Dettagli
+          </span>
 
-        <SignedIn>
-          <UploadButton
-            endpoint="imageUploader"
-            onClientUploadComplete={() => {
-              router.refresh();
-            }}
-          />
-          <UserButton />
-        </SignedIn>
+          <ul className="ml-8 hidden gap-6 text-sm md:flex md:items-center">
+            <li>
+              <Link
+                href="/"
+                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+              >
+                Todo
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/"
+                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+              >
+                Guia de Talles
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/"
+                className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+              >
+                Contacto
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );

@@ -17,9 +17,8 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 // import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
-import { Images, InsertProduct, type SelectProduct, type SelectImage } from "~/server/db/schema";
+import { type SelectProduct } from "~/server/db/schema";
 import { updateProduct } from "~/server/actions";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createProduct } from "~/server/actions";
 import { FileUploader } from "../file-uploader";
@@ -29,9 +28,6 @@ import slugify from "slugify";
 import { toast } from "sonner";
 import { getErrorMessage } from "~/lib/handle-error";
 import { omit } from "lodash-es";
-import { DevTool } from "@hookform/devtools";
-import { UploadedFile } from "~/types";
-
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -83,14 +79,13 @@ const ProductForm = ({ product }: Props) => {
   async function onSubmit(input: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-
+    setLoading(true)
     toast.promise(persistProduct(input, product?.id), {
       loading: "Creating product...",
       success: async (productId: number) => {
         if (input.imagesToUpload.length == 0) {
           return "Product saved..."
         }
-
 
         toast.promise(onUpload(input.imagesToUpload, { productId }), {
           loading: "Uploading images...",
@@ -200,18 +195,6 @@ const ProductForm = ({ product }: Props) => {
         <div className="grid gap-3">
           <Label htmlFor="image">Product Image</Label>
           <div className="grid gap-2">
-            {/* <div>
-              {product?.images?.map((file) => (
-                <Image
-                  key={file.url}
-                  src={file.url}
-                  alt={file.name}
-                  width={100}
-                  height={100}
-                  className="rounded-md object-cover"
-                />
-              ))}
-            </div> */}
             <FormField
               control={form.control}
               name="imagesToUpload"
@@ -243,8 +226,6 @@ const ProductForm = ({ product }: Props) => {
         </div>
         <Button type="submit" disabled={loading}>Submit</Button>
       </form>
-
-      {/* <DevTool control={form.control} /> */}
     </Form>
   );
 };

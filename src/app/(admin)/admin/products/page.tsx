@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { getProducts } from "~/server/queries";
+import { getProductsWithFeaturedImage } from "~/server/queries";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/admin" },
@@ -16,7 +16,7 @@ const breadcrumbItems = [
 ];
 
 export default async function page() {
-  const dbProducts = await getProducts();
+  const dbProducts = await getProductsWithFeaturedImage();
 
   return (
     <PageContainer>

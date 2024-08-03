@@ -34,3 +34,11 @@ export async function deleteProduct(productId: number) {
   const deletedProduct = await db.delete(Products).where(eq(Products.id, productId));
   console.log({ deletedProduct })
 }
+
+export async function setFeaturedImage(imageId: number, productId: number) {
+  console.log({ imageId, productId })
+  await db.transaction(async (tx) => {
+    await tx.update(Images).set({ isFeatured: false }).where(eq(Images.productId, productId));
+    await tx.update(Images).set({ isFeatured: true }).where(eq(Images.id, imageId));
+  })
+}

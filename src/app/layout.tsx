@@ -22,7 +22,8 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable} dark h-screen`}>
-        <body className="flex h-screen flex-col">{children}
+        <body className="flex h-screen flex-col bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
+          {children}
 
           <Toaster expand={true} />
         </body>
