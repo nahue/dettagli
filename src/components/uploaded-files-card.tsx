@@ -31,7 +31,7 @@ export function UploadedFilesCard({ uploadedFiles }: UploadedFilesCardProps) {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Fotos</CardTitle>
+                <CardTitle>Fotos ya cargadas</CardTitle>
                 <CardDescription>Seleccionar una foto como principal</CardDescription>
             </CardHeader>
             <CardContent>

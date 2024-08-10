@@ -20,7 +20,7 @@ export const ProductClient: React.FC<ProductsClientProps> = ({ data }) => {
           className="text-xs md:text-sm"
           onClick={() => router.push(`/admin/products/new`)}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add New
+          <Plus className="mr-2 h-4 w-4" /> Agregar
         </Button>
       </div>
       <DataTable columns={columns} data={data} />

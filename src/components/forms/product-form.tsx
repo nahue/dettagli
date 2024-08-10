@@ -15,7 +15,6 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-// import { Textarea } from "~/components/ui/textarea";
 import { Button } from "~/components/ui/button";
 import { type SelectProduct } from "~/server/db/schema";
 import { updateProduct } from "~/server/actions";
@@ -28,6 +27,7 @@ import slugify from "slugify";
 import { toast } from "sonner";
 import { getErrorMessage } from "~/lib/handle-error";
 import { omit } from "lodash-es";
+import { PRODUCT_SAVED, UPLOADING_PICTURES } from "~/lib/constants";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -84,11 +84,12 @@ const ProductForm = ({ product }: Props) => {
       loading: "Creating product...",
       success: async (productId: number) => {
         if (input.imagesToUpload.length == 0) {
-          return "Product saved..."
+          setLoading(false)
+          return `${PRODUCT_SAVED} ...`
         }
 
         toast.promise(onUpload(input.imagesToUpload, { productId }), {
-          loading: "Uploading images...",
+          loading: `${UPLOADING_PICTURES} ...`,
           success: () => {
             form.reset()
             setLoading(false)
@@ -101,7 +102,7 @@ const ProductForm = ({ product }: Props) => {
           },
         })
 
-        return "Product saved..."
+        return `${PRODUCT_SAVED} ...`
       },
       error: (err) => {
         setLoading(false)
@@ -124,14 +125,11 @@ const ProductForm = ({ product }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <Label htmlFor="name">Product Name</Label>
+                  <Label htmlFor="name">Nombre</Label>
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -145,13 +143,13 @@ const ProductForm = ({ product }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  <Label htmlFor="name">Slug</Label>
+                  <Label htmlFor="name">Identificador</Label>
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name.
+                  Este identificador se usa en la URL para compartir el link y que se vea el nombre del producto.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -174,13 +172,13 @@ const ProductForm = ({ product }: Props) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <Label>Price</Label>
+                    <Label>Precio</Label>
                   </FormLabel>
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    Sin puntos ni espacios.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -193,7 +191,7 @@ const ProductForm = ({ product }: Props) => {
           </div> */}
         </div>
         <div className="grid gap-3">
-          <Label htmlFor="image">Product Image</Label>
+          <Label htmlFor="image">Fotos</Label>
           <div className="grid gap-2">
             <FormField
               control={form.control}
@@ -201,7 +199,7 @@ const ProductForm = ({ product }: Props) => {
               render={({ field }) => (
                 <div className="space-y-6">
                   <FormItem className="w-full">
-                    <FormLabel>Images</FormLabel>
+                    {/* <FormLabel>Images</FormLabel> */}
                     <FormControl>
                       <FileUploader
                         value={field.value}

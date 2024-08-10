@@ -11,7 +11,7 @@ import {
 import { getProductsWithFeaturedImage } from "~/server/queries";
 
 const breadcrumbItems = [
-  { title: "Dashboard", link: "/admin" },
+  { title: "Principal", link: "/admin" },
   { title: "Productos", link: "/dashboard/products" },
 ];
 

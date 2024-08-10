@@ -14,15 +14,15 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-1 dark:bg-neutral-800">
+    <div className="grid min-h-screen w-full lg:grid-cols-[280px_1fr]">
       <AppSidebar />
 
       <main className="flex flex-1 overflow-hidden">
-        <div className="flex flex-1">
-          <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-900">
-            {children}
-          </div>
+
+        <div className="flex h-full w-full flex-1 flex-col gap-2 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-900">
+          {children}
         </div>
+
       </main>
     </div>
   );

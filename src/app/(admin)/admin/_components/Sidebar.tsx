@@ -1,21 +1,13 @@
 "use client";
 
-import { Sidebar, SidebarBody, SidebarLink } from "~/components/ui/sidebar";
-
-import React, { useState } from "react";
-// import { DashboardNav } from "@/components/dashboard-nav";
-import { navItems } from "~/constants/data";
-import { cn } from "~/utils/style";
-import { ChevronLeft } from "lucide-react";
-// import { useSidebar } from "@/hooks/useSidebar";
+import React from "react";
 import Link from "next/link";
-import { DashboardNav } from "./DashboardNav";
 import { IconBrandTabler, IconBuildingStore } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 
 const links = [
   {
-    label: "Dashboard",
+    label: "Principal",
     href: "/admin",
     icon: (
       <IconBrandTabler className="h-5 w-5 flex-shrink-0 text-neutral-700 dark:text-neutral-200" />
@@ -31,23 +23,38 @@ const links = [
 ];
 
 export default function AppSidebar() {
-  const [open, setOpen] = useState(false);
+
 
   return (
-    <Sidebar open={open} setOpen={setOpen} animate={false}>
-      <SidebarBody className="justify-between gap-10">
+    <div className="hidden border-r bg-muted/40 lg:block">
+      <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-          <>
-            <Logo />
-          </>
-          <div className="mt-8 flex flex-col gap-2">
-            {links.map((link, idx) => (
-              <SidebarLink key={idx} link={link} />
-            ))}
+          <div className="flex h-[60px] items-center border-b px-6">
+            <Link
+              href="/"
+              className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
+            >
+              <Logo />
+            </Link>
+          </div>
+          <div className="flex-1 overflow-auto py-2">
+            <nav className="grid items-start px-4 text-sm font-medium">
+              {links.map((link, idx) => (
+                <Link
+                  href={link.href}
+                  key={idx}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                  prefetch={false}
+                >
+                  {link.icon}
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
-      </SidebarBody>
-    </Sidebar>
+      </div>
+    </div>
   );
 
   //   return (
@@ -98,10 +105,7 @@ export default function AppSidebar() {
 
 export const Logo = () => {
   return (
-    <Link
-      href="/"
-      className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
-    >
+    <>
       <div className="h-5 w-6 flex-shrink-0 rounded-bl-sm rounded-br-lg rounded-tl-lg rounded-tr-sm bg-black dark:bg-white" />
       <motion.span
         initial={{ opacity: 0 }}
@@ -110,6 +114,6 @@ export const Logo = () => {
       >
         Dettagli
       </motion.span>
-    </Link>
+    </>
   );
 };
