@@ -1,7 +1,7 @@
 import { ImageIcon } from "@radix-ui/react-icons"
 
-import { cn } from "~/lib/utils"
-import { Card, CardDescription, CardTitle } from "~/components/ui/card"
+import { cn } from "@/lib/utils"
+import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 
 interface EmptyCardProps extends React.ComponentPropsWithoutRef<typeof Card> {
     title: string

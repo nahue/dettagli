@@ -12,22 +12,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { Button } from "~/components/ui/button";
-import { type SelectProduct } from "~/server/db/schema";
-import { updateProduct } from "~/server/actions";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { type SelectProduct } from "@/server/db/schema";
+import { updateProduct, createProduct } from "@/server/actions";
 import { useRouter } from "next/navigation";
-import { createProduct } from "~/server/actions";
 import { FileUploader } from "../file-uploader";
-import { useUploadFile } from "~/hooks/use-upload-file";
+import { useUploadFile } from "@/hooks/use-upload-file";
 import { UploadedFilesCard } from "../uploaded-files-card";
 import slugify from "slugify";
 import { toast } from "sonner";
-import { getErrorMessage } from "~/lib/handle-error";
+import { getErrorMessage } from "@/lib/handle-error";
 import { omit } from "lodash-es";
-import { PRODUCT_SAVED, UPLOADING_PICTURES } from "~/lib/constants";
+import { PRODUCT_SAVED, UPLOADING_PICTURES } from "@/lib/constants";
 
 const formSchema = z.object({
   name: z.string().min(2, {

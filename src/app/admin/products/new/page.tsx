@@ -4,9 +4,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "@/components/ui/card";
 
-import ProductForm from "../../../../../components/forms/product-form";
+import ProductForm from "@/components/forms/product-form";
 
 export default async function Page() {
   return (

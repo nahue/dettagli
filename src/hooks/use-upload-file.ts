@@ -1,11 +1,11 @@
 import * as React from "react"
-import type { UploadedFile } from "~/types"
+import type { UploadedFile } from "@/types"
 import { toast } from "sonner"
 import type { UploadFilesOptions } from "uploadthing/types"
 
-import { getErrorMessage } from "~/lib/handle-error"
-import { uploadFiles } from "~/lib/uploadthing"
-import { type OurFileRouter } from "~/app/api/uploadthing/core"
+import { getErrorMessage } from "@/lib/handle-error"
+import { uploadFiles } from "@/lib/uploadthing"
+import { type OurFileRouter } from "@/app/api/uploadthing/core"
 
 interface UseUploadFileProps
     extends Pick<

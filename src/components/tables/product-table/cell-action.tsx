@@ -1,21 +1,21 @@
 "use client";
-import { AlertModal } from "~/components/modal/alert-modal";
-import { Button } from "~/components/ui/button";
+import { AlertModal } from "@/components/modal/alert-modal";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { type Product } from "~/constants/data";
+} from "@/components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { deleteProduct } from "~/server/actions";
+import { deleteProduct } from "@/server/actions";
+import { SelectProduct } from "@/server/db/schema";
 
 interface CellActionProps {
-  data: Product;
+  data: SelectProduct;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { GridTileImage } from '~/components/grid-tile-image';
-import { type SelectProduct } from '~/server/db/schema';
+import { GridTileImage } from '@/components/grid-tile-image';
+import { type SelectProduct } from '@/server/db/schema';
 
 function ThreeItemGridItem({
     item,
@@ -11,6 +11,11 @@ function ThreeItemGridItem({
     size: 'full' | 'half';
     priority?: boolean;
 }) {
+    if (!item.images[0]) {
+        console.log({ item })
+        return null;
+    }
+
     return (
         <div
             className={size === 'full' ? 'md:col-span-4 md:row-span-2' : 'md:col-span-2 md:row-span-1'}

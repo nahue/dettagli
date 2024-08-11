@@ -1,5 +1,5 @@
 import Image from "next/image"
-import type { UploadedFile } from "~/types"
+import type { UploadedFile } from "@/types"
 
 import {
     Card,
@@ -7,13 +7,13 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-} from "~/components/ui/card"
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area"
-import { EmptyCard } from "~/components/empty-card"
+} from "@/components/ui/card"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { EmptyCard } from "@/components/empty-card"
 import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
-import { setFeaturedImage } from "~/server/actions"
+import { setFeaturedImage } from "@/server/actions"
 import { toast } from "sonner"
-import { getErrorMessage } from "~/lib/handle-error"
+import { getErrorMessage } from "@/lib/handle-error"
 
 interface UploadedFilesCardProps {
     uploadedFiles: UploadedFile[]

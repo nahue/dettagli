@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import Price from "~/components/price";
+import Price from "@/components/price";
 
 const ProductLabel = ({
     title,

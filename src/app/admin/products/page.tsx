@@ -1,14 +1,14 @@
-import { Breadcrumbs } from "~/components/breadcrumbs";
-import PageContainer from "~/components/layout/page-container";
-import { ProductClient } from "~/components/tables/product-table/client";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import PageContainer from "@/components/layout/page-container";
+import { ProductClient } from "@/components/tables/product-table/client";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
-import { getProductsWithFeaturedImage } from "~/server/queries";
+} from "@/components/ui/card";
+import { getProductsWithFeaturedImage } from "@/server/queries";
 
 const breadcrumbItems = [
   { title: "Principal", link: "/admin" },

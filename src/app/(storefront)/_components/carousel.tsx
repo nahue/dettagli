@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
-import { GridTileImage } from '~/components/grid-tile-image';
-import { SelectProduct } from '~/server/db/schema';
+import { GridTileImage } from '@/components/grid-tile-image';
+import { SelectProduct } from '@/server/db/schema';
 
 export async function Carousel(items: SelectProduct[]) {
     const products: SelectProduct[] = items["products"]

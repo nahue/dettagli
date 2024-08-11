@@ -1,10 +1,10 @@
 "use client";
-import { Button } from "~/components/ui/button";
-import { DataTable } from "~/components/ui/data-table";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columns } from "./columns";
-import { type SelectProduct } from "~/server/db/schema";
+import { type SelectProduct } from "@/server/db/schema";
 
 interface ProductsClientProps {
   data: SelectProduct[];

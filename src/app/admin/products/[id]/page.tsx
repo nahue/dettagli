@@ -4,12 +4,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "@/components/ui/card";
 
-import { getProduct } from "~/server/queries";
-import ProductForm from "../../../../../components/forms/product-form";
-import PageContainer from "~/components/layout/page-container";
-import { Breadcrumbs } from "~/components/breadcrumbs";
+import { getProduct } from "@/server/queries";
+import ProductForm from "@/components/forms/product-form";
+import PageContainer from "@/components/layout/page-container";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 
 
 

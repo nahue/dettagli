@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "./db";
 import { Images, Products, type InsertProduct } from "./db/schema";
 import { getProduct } from "./queries";
-import { utapi } from "~/server/uploadthing";
+import { utapi } from "@/server/uploadthing";
 
 
 export async function updateProduct(data: InsertProduct, productId: number) {

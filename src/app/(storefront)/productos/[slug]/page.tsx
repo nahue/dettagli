@@ -1,7 +1,7 @@
-import { Gallery } from "~/components/product/gallery";
-import { ProductDescription } from "~/components/product/product-description";
-import { SelectImage } from "~/server/db/schema";
-import { getProductBySlug } from "~/server/queries";
+import { Gallery } from "@/components/product/gallery";
+import { ProductDescription } from "@/components/product/product-description";
+import { SelectImage } from "@/server/db/schema";
+import { getProductBySlug } from "@/server/queries";
 
 export default async function Page({ params }: { params: { slug: string } }) {
     const product = await getProductBySlug(params.slug);

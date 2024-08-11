@@ -1,11 +1,10 @@
 import {
   Breadcrumb,
-  BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb";
 import { Slash } from "lucide-react";
 import { Fragment } from "react";
 import Link from "next/link";

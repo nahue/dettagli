@@ -1,8 +1,8 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { z } from "zod";
-import { db } from "~/server/db";
-import { Images } from "~/server/db/schema";
-// import { images } from "~/server/db/schema";
+import { db } from "@/server/db";
+import { Images } from "@/server/db/schema";
+// import { images } from "@/server/db/schema";
 
 const f = createUploadthing();
 

@@ -2,7 +2,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
 import Image from "next/image";
-import { SelectProduct } from "~/server/db/schema";
+import { SelectProduct } from "@/server/db/schema";
 
 export const columns: ColumnDef<SelectProduct>[] = [
   //   {
