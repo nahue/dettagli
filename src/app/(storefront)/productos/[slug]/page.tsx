@@ -1,7 +1,18 @@
 import { Gallery } from "@/components/product/gallery";
 import { ProductDescription } from "@/components/product/product-description";
+import { db } from "@/server/db";
 import { SelectImage } from "@/server/db/schema";
 import { getProductBySlug } from "@/server/queries";
+
+export async function generateStaticParams() {
+    const products = await db.query.Products.findMany({
+        columns: {
+            slug: true,
+        },
+    });
+    return products.map((product) => ({ params: { slug: product.slug } }));
+}
+
 
 export default async function Page({ params }: { params: { slug: string } }) {
     const product = await getProductBySlug(params.slug);

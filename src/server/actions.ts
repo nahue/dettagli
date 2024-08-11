@@ -5,11 +5,12 @@ import { db } from "./db";
 import { Images, Products, type InsertProduct } from "./db/schema";
 import { getProduct } from "./queries";
 import { utapi } from "@/server/uploadthing";
+import { revalidatePath } from "next/cache";
 
 
 export async function updateProduct(data: InsertProduct, productId: number) {
   await db.update(Products).set(data).where(eq(Products.id, productId));
-  //revalidatePath(`/admin/products/${data.id}`);
+  // revalidatePath(`/productos/${data.slug}`);
   return productId
 }
 
