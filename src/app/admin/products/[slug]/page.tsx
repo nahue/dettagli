@@ -6,20 +6,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { getProduct } from "@/server/queries";
+import { getProductBySlug } from "@/server/queries";
 import ProductForm from "@/components/forms/product-form";
 import PageContainer from "@/components/layout/page-container";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 
 
 
-export default async function Page({ params }: { params: { id: number } }) {
-  const product = await getProduct(params.id);
+export default async function Page({ params }: { params: { slug: string } }) {
+  const product = await getProductBySlug(params.slug);
 
   const breadcrumbItems = [
     { title: "Dashboard", link: "/admin" },
     { title: "Productos", link: "/admin/products" },
-    { title: product?.name!, link: `/admin/products/${product?.id}` },
+    { title: product?.name!, link: `/admin/products/${product?.slug}` },
   ];
 
   return (
