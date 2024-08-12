@@ -63,11 +63,11 @@ const ProductForm = ({ product }: Props) => {
     { defaultUploadedFiles: product?.images || [] }
   )
 
-  async function persistImages(images: File[], productId: number) {
+  async function persistImages(images: File[], productId: number, isNewProduct = false) {
     if (images.length == 0) return
 
     const toastId = toast.loading("Procesando imagenes...")
-    await onUpload(images, { productId })
+    await onUpload(images, { productId, isFeatured: isNewProduct })
     toast.success("Imagenes actualizadas!")
     toast.dismiss(toastId)
   }
@@ -90,7 +90,7 @@ const ProductForm = ({ product }: Props) => {
       slug: slugify(data.name)
     })
 
-    await persistImages(data.imagesToUpload, newProductId)
+    await persistImages(data.imagesToUpload, newProductId, true)
 
     toast.dismiss(toastId)
     return data.slug

@@ -11,10 +11,11 @@ export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
   imageUploader: f({ image: { maxFileSize: "4MB" } })
     .input(z.object({
-      productId: z.number()
+      productId: z.number(),
+      isFeatured: z.boolean().default(false)
     }))
     // Set permissions and file types for this FileRoute
-    .middleware(async ({ req, input: { productId } }) => {
+    .middleware(async ({ req, input: { productId, isFeatured } }) => {
       // This code runs on your server before upload
       // TODO: reactivar
       //const user = auth();
@@ -24,7 +25,8 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       //return { userId: user.userId };
       return {
-        productId
+        productId,
+        isFeatured
       }
     })
     .onUploadComplete(async ({ metadata, file }) => {
@@ -34,6 +36,7 @@ export const ourFileRouter = {
         name: file.name,
         url: file.url,
         productId: metadata.productId,
+        isFeatured: metadata.isFeatured
       })
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
