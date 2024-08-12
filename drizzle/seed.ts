@@ -1,27 +1,36 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import "dotenv/config";
 import { createVariant } from "../src/server/queries";
-import { Images, Products, ProductVariantTable } from "../src/server/db/schema";
+import { Images, Products, ProductVariantTable, users } from "../src/server/db/schema";
 import { db } from "../src/server/db";
 import { random, sampleSize } from "lodash-es";
+import bcrypt from "bcryptjs";
 async function main() {
-  const variants = await createVariant([
-    {
-      name: "XS",
-    },
-    {
-      name: "S",
-    },
-    {
-      name: "M",
-    },
-    {
-      name: "L",
-    },
-    {
-      name: "XL",
-    },
-  ]);
+
+  const passwordHash = await bcrypt.hash(process.env.ADMIN_PASS as string, 10);
+
+  const user = await db.insert(users).values({
+    name: 'admin',
+    password_hash: passwordHash
+  }).returning()
+
+  // const variants = await createVariant([
+  //   {
+  //     name: "XS",
+  //   },
+  //   {
+  //     name: "S",
+  //   },
+  //   {
+  //     name: "M",
+  //   },
+  //   {
+  //     name: "L",
+  //   },
+  //   {
+  //     name: "XL",
+  //   },
+  // ]);
 
   const products = [{
     name: "Remera WAFFLE",

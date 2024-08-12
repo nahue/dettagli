@@ -51,3 +51,10 @@ export async function getProductBySlug(slug: string) {
 export async function createVariant(data: InsertVariant | InsertVariant[]) {
   return await db.insert(Variants).values(data).returning();
 }
+
+export async function getUser(username: string) {
+  return await db.query.users.findFirst({
+    where: (model, { eq }) => eq(model.name, username),
+  })
+
+}
