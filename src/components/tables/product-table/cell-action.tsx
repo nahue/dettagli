@@ -17,7 +17,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
 
   const onConfirm = async () => {
-    deleteProduct(data.id)
+    await deleteProduct(data.id)
+    setOpen(false)
+    router.refresh()
   };
 
   return (

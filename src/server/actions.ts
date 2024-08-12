@@ -29,7 +29,9 @@ export async function deleteProduct(productId: number) {
   const product = await getProduct(productId);
   // console.log(product!.images)
 
-  await utapi.deleteFiles(product!.images.map((image) => image.url.replace('https://utfs.io/f/', '')));
+  if (product!.images.length > 0) {
+    await utapi.deleteFiles(product!.images.map((image) => image.url.replace('https://utfs.io/f/', '')));
+  }
   // const deletedImages = await db.delete(Images).where(eq(Images.productId, productId));
 
   const deletedProduct = await db.delete(Products).where(eq(Products.id, productId));

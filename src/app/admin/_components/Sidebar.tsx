@@ -26,32 +26,30 @@ export default function AppSidebar() {
 
 
   return (
-    <div className="hidden border-r bg-muted/40 lg:block">
+    <div id="sidebar" className="hidden border-r bg-muted/40 lg:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-          <div className="flex h-[60px] items-center border-b px-6">
-            <Link
-              href="/"
-              className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
-            >
-              <Logo />
-            </Link>
-          </div>
-          <div className="flex-1 overflow-auto py-2">
-            <nav className="grid items-start px-4 text-sm font-medium">
-              {links.map((link, idx) => (
-                <Link
-                  href={link.href}
-                  key={idx}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-                  prefetch={false}
-                >
-                  {link.icon}
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
+        <div className="flex h-[60px] items-center border-b px-6">
+          <Link
+            href="/"
+            className="relative z-20 flex items-center space-x-2 py-1 text-sm font-normal text-black"
+          >
+            <Logo />
+          </Link>
+        </div>
+        <div className="flex-1 overflow-auto py-2">
+          <nav className="grid items-start px-4 text-sm font-medium">
+            {links.map((link, idx) => (
+              <Link
+                href={link.href}
+                key={idx}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                prefetch={false}
+              >
+                {link.icon}
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </div>

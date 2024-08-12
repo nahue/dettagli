@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/handle-error";
 import { omit } from "lodash-es";
 import { PRODUCT_SAVED, UPLOADING_PICTURES } from "@/lib/constants";
+import { revalidatePath } from "next/cache";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -62,53 +63,50 @@ const ProductForm = ({ product }: Props) => {
     { defaultUploadedFiles: product?.images || [] }
   )
 
-  function persistProduct(data: z.infer<typeof formSchema>, productId: number | undefined) {
+  async function persistImages(images: File[], productId: number) {
+    if (images.length == 0) return
+
+    const toastId = toast.loading("Procesando imagenes...")
+    await onUpload(images, { productId })
+    toast.success("Imagenes actualizadas!")
+    toast.dismiss(toastId)
+  }
+
+  async function persistProduct(data: z.infer<typeof formSchema>, productId: number | undefined) {
     const dbData = omit(data, ["imagesToUpload"])
 
+    const toastId = toast.loading("Procesando...")
+
     if (productId) {
-      return updateProduct(dbData, productId)
+      await updateProduct(dbData, productId)
+      toast.success("Producto actualizado!")
+      await persistImages(data.imagesToUpload, productId)
+      toast.dismiss(toastId)
+      return data.slug
     }
 
-    return createProduct({
+    const newProductId = await createProduct({
       ...dbData,
       slug: slugify(data.name)
     })
+
+    await persistImages(data.imagesToUpload, newProductId)
+
+    toast.dismiss(toastId)
+    return data.slug
   }
 
   async function onSubmit(input: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setLoading(true)
-    toast.promise(persistProduct(input, product?.id), {
-      loading: "Creating product...",
-      success: async (productId: number) => {
-        if (input.imagesToUpload.length == 0) {
-          setLoading(false)
-          return `${PRODUCT_SAVED} ...`
-        }
 
-        toast.promise(onUpload(input.imagesToUpload, { productId }), {
-          loading: `${UPLOADING_PICTURES} ...`,
-          success: () => {
-            form.reset()
-            setLoading(false)
-            router.push(`/admin/products/${productId}`);
-            return "Images uploaded"
-          },
-          error: (err) => {
-            setLoading(false)
-            return getErrorMessage(err)
-          },
-        })
+    const productSlug = await persistProduct(input, product?.id)
 
-        return `${PRODUCT_SAVED} ...`
-      },
-      error: (err) => {
-        setLoading(false)
-        return getErrorMessage(err)
-      },
-    })
-
+    setLoading(false)
+    // router.push(`/admin/products/${productSlug}`);
+    router.push("/admin/products");
+    router.refresh()
   }
 
   return (
