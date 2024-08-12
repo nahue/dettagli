@@ -3,7 +3,7 @@ import React from "react";
 import type { Metadata } from "next";
 import AppSidebar from "./_components/Sidebar";
 
-export const dynamic = 'force-dynamic'
+// export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: "Next Shadcn Dashboard Starter",
