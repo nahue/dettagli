@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import { getProductsWithFeaturedImage } from "@/server/queries";
 
+export const dynamic = "force-dynamic"
+
 const breadcrumbItems = [
   { title: "Principal", link: "/admin" },
   { title: "Productos", link: "/dashboard/products" },

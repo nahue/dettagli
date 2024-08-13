@@ -105,8 +105,8 @@ const ProductForm = ({ product }: Props) => {
 
     setLoading(false)
     // router.push(`/admin/products/${productSlug}`);
-    router.push("/admin/products");
-    router.refresh()
+    // router.push("/admin/products");
+    window.location.replace("/admin/products");
   }
 
   return (
