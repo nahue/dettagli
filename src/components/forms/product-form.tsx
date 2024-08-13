@@ -219,7 +219,7 @@ const ProductForm = ({ product }: Props) => {
             />
           </div>
         </div>
-        <Button type="submit" disabled={loading}>Submit</Button>
+        <Button type="submit" disabled={loading}>Guardar</Button>
       </form>
     </Form>
   );

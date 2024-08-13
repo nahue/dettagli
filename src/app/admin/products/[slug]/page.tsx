@@ -17,7 +17,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const product = await getProductBySlug(params.slug);
 
   const breadcrumbItems = [
-    { title: "Dashboard", link: "/admin" },
+    { title: "Principal", link: "/admin" },
     { title: "Productos", link: "/admin/products" },
     { title: product?.name!, link: `/admin/products/${product?.slug}` },
   ];

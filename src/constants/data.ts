@@ -42,10 +42,10 @@ export const products: Product[] = [
 
 export const navItems: NavItem[] = [
   {
-    title: "Dashboard",
+    title: "Principal",
     href: "/admin",
     icon: "dashboard",
-    label: "Dashboard",
+    label: "Principal",
   },
   {
     title: "Productos",
