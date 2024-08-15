@@ -4,7 +4,6 @@
 import { InferSelectModel, relations } from "drizzle-orm";
 import {
   boolean,
-  pgTableCreator,
   primaryKey,
   real,
   serial,
@@ -12,6 +11,7 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
+import { createTable } from "./util";
 
 export * from "./auth-schema"
 
@@ -22,7 +22,6 @@ export * from "./auth-schema"
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `dettagli_${name}`);
 
 export const Variants = createTable("variant", {
   id: serial("id").primaryKey(),

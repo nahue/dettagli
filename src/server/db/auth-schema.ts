@@ -2,7 +2,6 @@ import type { AdapterAccountType } from "next-auth/adapters"
 
 import {
     boolean,
-    pgTableCreator,
     primaryKey,
     real,
     serial,
@@ -12,8 +11,7 @@ import {
     text,
     integer
 } from "drizzle-orm/pg-core";
-
-export const createTable = pgTableCreator((name) => `dettagli_${name}`);
+import { createTable } from "./util";
 
 export const users = createTable("user", {
     id: text("id")
